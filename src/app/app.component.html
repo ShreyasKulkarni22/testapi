@@ -1,5 +1,7 @@
 <!-- <div class="line" [chart]="lineChart"></div> -->
-
+<div>
+    <button (click)="generate_PDF()">Generate Stock Portfolio PDF</button>
+  </div>
 <div *ngFor="let stock of dbstocks">
     <p>{{stock.stockName}}</p>
     <p>{{stock.stockPrice}}</p>

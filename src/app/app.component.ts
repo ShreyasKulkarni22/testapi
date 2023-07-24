@@ -9,6 +9,11 @@ import { StockService } from './stock.service';
 import { DataStock } from './Models/DataStock';
 import { mergeMap, Observable, map } from 'rxjs';
 import { compileNgModule } from '@angular/compiler';
+
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { Alignment, Margins } from 'pdfmake/interfaces';
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -220,4 +225,150 @@ async getStockinfo(sym:string):Promise<number>{
   //     ]
   //   })
   // }
+
+
+
+    generatePDF() {
+      
+    // Assign the fonts to the vfs property
+    // pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+    const documentDefinition = {
+      content: [
+        { text: 'Stock Portfolio', style: 'header' },
+        { text: ' ', style: 'subheader' },
+        ...this.dbstocks.map(stock => ({
+          columns: [
+            { text: `Stock Name: ${stock.stockName}` },
+            { text: `Symbol: ${stock.stockSymbol}` },
+            { text: `Quantity: ${stock.stockQuantity}` },
+            { text: `Price: $${stock.stockPrice}` },
+            { text: `Total Value: $${stock.stockQuantity * stock.stockPrice}` },
+          ],
+        })),
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          alignment: 'center' as Alignment, // Use 'center' or other valid alignment options
+        },
+        subheader: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 20, 0, 10] as Margins,
+        },
+      },
+    };
+
+    pdfMake.createPdf(documentDefinition).download('stock_portfolio.pdf');
+  }
+
+
+
+
+
+
+
+
+
+
+  generate_PDF() {
+    // Set the virtual file system with the provided fonts
+    pdfMake.createPdf(this.getDocumentDefinition()).download('stock_portfolio.pdf');
+  }
+
+  // getDocumentDefinition() {
+  //   const content = [
+  //     { text: 'Stock Portfolio', style: 'header' },
+  //     { text: ' ', style: 'subheader' },
+  //     ...this.dbstocks.map(stock => ({
+  //       columns: [
+  //         { text: `Stock Name: ${stock.stockName}` },
+  //         { text: `Symbol: ${stock.stockSymbol}` },
+  //         { text: `Quantity: ${stock.stockQuantity}` },
+  //         { text: `Price: $${stock.stockPrice}` },
+  //         { text: `Total Value: $${stock.stockQuantity * stock.stockPrice}` },
+  //       ],
+  //     })),
+  //   ];
+
+  //   const styles = {
+  //     header: {
+  //       fontSize: 18,
+  //       bold: true,
+  //       alignment: 'center' as Alignment, // Use 'center' or other valid alignment options
+  //     },
+  //     subheader: {
+  //       fontSize: 14,
+  //       bold: true,
+  //       margin: [0, 20, 0, 10] as Margins, // Specify Margins type explicitly
+  //     },
+  //   };
+
+  //   return { content, styles };
+  // }
+
+
+  getDocumentDefinition() {
+    const content = [
+      { text: 'Stock Portfolio', style: 'header' },
+      { text: ' ', style: 'subheader' },
+      this.getTableData(),
+    ];
+
+    const styles = {
+      header: {
+        fontSize: 18,
+        bold: true,
+        alignment: 'center' as Alignment,
+        margin: [0, 0, 0, 10] as Margins,
+      },
+      subheader: {
+        fontSize: 14,
+        bold: true,
+        margin: [0, 20, 0, 10] as Margins,
+      },
+      tableHeader: {
+        bold: true,
+        fillColor: '#f2f2f2',
+      },
+      tableRow: {
+        fillColor: '#ffffff',
+      },
+    };
+
+    return { content, styles };
+  }
+
+  getTableData() {
+    const tableHeader = [
+      { text: 'Stock Name', style: 'tableHeader' },
+      { text: 'Symbol', style: 'tableHeader' },
+      { text: 'Quantity', style: 'tableHeader' },
+      { text: 'Price', style: 'tableHeader' },
+      { text: 'Current Price', style:'tableHeader'},
+      { text: 'Total Value Invested', style: 'tableHeader' },
+      { text: 'Current Portfolio Value', style: 'tableHeader' }
+    ];
+
+    const tableRows = this.dbstocks.map(stock => [
+      stock.stockName,
+      stock.stockSymbol,
+      stock.stockQuantity.toString(),
+      `$${stock.stockPrice.toFixed(2)}`,
+      `$${stock.CurrPrice.toFixed(2)}`,
+      `$${(stock.stockQuantity * stock.stockPrice).toFixed(2)}`,
+      `$${(stock.stockQuantity * stock.CurrPrice).toFixed(2)}`,
+    ]);
+
+    return {
+      table: {
+        headerRows: 1,
+        widths: ['*', '*', '*', '*', '*', '*', '*'],
+        body: [tableHeader, ...tableRows],
+      },
+      layout: 'lightHorizontalLines',
+    };
+  }
 }
