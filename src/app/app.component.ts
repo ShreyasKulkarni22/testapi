@@ -24,6 +24,7 @@ export class AppComponent implements OnInit{
   
   // data!:Stock[]
   data: any
+  
   dbstocks!:DataStock[]
   // chartData: ChartData = {
   //   historical: [],
@@ -132,19 +133,7 @@ async getStockinfo(sym:string):Promise<number>{
     curr = data
   })
 
-  //  this.market.getStockInfo(sym).subscribe(res=>{
-  //     this.data=res
-  //     curr = this.data[0]["price"]
-  //     console.log('curr', curr)
-  //   })
-    
-    // let curr=0
-    // setTimeout(() => {
-      //   // console.log('data ', this.data[0]["symbol"],this.data[0]["name"],this.data[0]["price"],this.data[0]["dayLow"])
-      //  curr = this.data[0]["price"]
-      // //  console.log(curr);
-      
-      // }, 3000)
+ 
       
       console.log('returncurr', curr)
     return curr
@@ -173,144 +162,17 @@ async getStockinfo(sym:string):Promise<number>{
       return 0; 
     }
   }
-  
-  
-  // getHistorical(sym:string){
-  //   this.market.getHistorical(sym).subscribe(res=>{
-  //     this.chartData=res
-  //   })
-    
-  //   setTimeout(() => {
-  //     console.log('chartData ', this.chartData)
-  //     // return this.data
-  //     this.generateLineChart(this.chartData);
-  //   }, 2000);
-  // }
-  
-  // generateLineChart(chartData: any){
-  //   console.log(this.chartData.historical)
-  //   const seriesData = this.chartData.historical.map((item: { date: string | number | Date; close: any; }) => [
-  //     new Date(item.date).getDate(),
-  //     item.close
-  //   ]);
-  //   console.log('chartData ', this.chartData)
-  //   console.log('seriesData ', seriesData)
-  //   this.lineChart=new Chart({
-  //     chart: {
-  //       type: 'line'
-  //     },
-  //     title: {
-  //       text: 'Linechart'
-  //     },
-  //     credits: {
-  //       enabled: false
-  //     },
-  //   xAxis: {
-  //     type: 'category',
-  //     title: {
-  //       text: 'Date'
-  //     }
-  //   },
-  //   yAxis: {
-  //     title: {
-  //       text: 'Close Price'
-  //     }
-  //   },
-  //     series: [
-  //       {
-  //         type:'line',
-  //         name: 'Line 1',
-  //         data: seriesData
-  //       }
-  //     ]
-  //   })
-  // }
-
-
-
-    generatePDF() {
-      
-    // Assign the fonts to the vfs property
-    // pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-    const documentDefinition = {
-      content: [
-        { text: 'Stock Portfolio', style: 'header' },
-        { text: ' ', style: 'subheader' },
-        ...this.dbstocks.map(stock => ({
-          columns: [
-            { text: `Stock Name: ${stock.stockName}` },
-            { text: `Symbol: ${stock.stockSymbol}` },
-            { text: `Quantity: ${stock.stockQuantity}` },
-            { text: `Price: $${stock.stockPrice}` },
-            { text: `Total Value: $${stock.stockQuantity * stock.stockPrice}` },
-          ],
-        })),
-      ],
-      styles: {
-        header: {
-          fontSize: 18,
-          bold: true,
-          alignment: 'center' as Alignment, // Use 'center' or other valid alignment options
-        },
-        subheader: {
-          fontSize: 14,
-          bold: true,
-          margin: [0, 20, 0, 10] as Margins,
-        },
-      },
-    };
-
-    pdfMake.createPdf(documentDefinition).download('stock_portfolio.pdf');
-  }
-
-
-
-
-
-
-
-
-
 
   generate_PDF() {
     // Set the virtual file system with the provided fonts
     pdfMake.createPdf(this.getDocumentDefinition()).download('stock_portfolio.pdf');
   }
 
-  // getDocumentDefinition() {
-  //   const content = [
-  //     { text: 'Stock Portfolio', style: 'header' },
-  //     { text: ' ', style: 'subheader' },
-  //     ...this.dbstocks.map(stock => ({
-  //       columns: [
-  //         { text: `Stock Name: ${stock.stockName}` },
-  //         { text: `Symbol: ${stock.stockSymbol}` },
-  //         { text: `Quantity: ${stock.stockQuantity}` },
-  //         { text: `Price: $${stock.stockPrice}` },
-  //         { text: `Total Value: $${stock.stockQuantity * stock.stockPrice}` },
-  //       ],
-  //     })),
-  //   ];
-
-  //   const styles = {
-  //     header: {
-  //       fontSize: 18,
-  //       bold: true,
-  //       alignment: 'center' as Alignment, // Use 'center' or other valid alignment options
-  //     },
-  //     subheader: {
-  //       fontSize: 14,
-  //       bold: true,
-  //       margin: [0, 20, 0, 10] as Margins, // Specify Margins type explicitly
-  //     },
-  //   };
-
-  //   return { content, styles };
-  // }
+ 
 
 
   getDocumentDefinition() {
+    
     const content = [
       { text: 'Stock Portfolio', style: 'header' },
       { text: ' ', style: 'subheader' },
