@@ -12,9 +12,10 @@ import { Alignment, Margins } from 'pdfmake/interfaces';
   styleUrls: ['./piechartpdf.component.css']
 })
 export class PieChartPdfComponent implements OnInit {
+  
   constructor(private elementRef: ElementRef) {
     // pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
+    
   }
 
   chart: any; // Chart object

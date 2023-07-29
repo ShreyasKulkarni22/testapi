@@ -14,6 +14,6 @@ export class StockService {
   constructor(private http: HttpClient) {}
 
   getAllStocks(): Observable<DataStock[]> {
-    return this.http.get<DataStock[]>(this.apiUrl+"api/Stock/1");
+    return this.http.get<DataStock[]>(this.apiUrl+"api/Stock/4");
   }
 }
