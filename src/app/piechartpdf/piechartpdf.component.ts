@@ -1,9 +1,10 @@
-import { Component, AfterViewInit, ElementRef,OnInit } from '@angular/core';
+import { Component, AfterViewInit, ElementRef,OnInit ,Input} from '@angular/core';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import Chart from 'chart.js/auto';
 import html2canvas from 'html2canvas';
 import { Alignment, Margins } from 'pdfmake/interfaces';
+import { DataStock } from '../Models/DataStock';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { Alignment, Margins } from 'pdfmake/interfaces';
   styleUrls: ['./piechartpdf.component.css']
 })
 export class PieChartPdfComponent implements OnInit {
-  
+  @Input() msg!:DataStock[]
   constructor(private elementRef: ElementRef) {
     // pdfMake.vfs = pdfFonts.pdfMake.vfs;
     
@@ -22,7 +23,7 @@ export class PieChartPdfComponent implements OnInit {
 
   ngOnInit() {
     const chartData = {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      labels:['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
       datasets: [{
         data: [1, 10, 60, 25, 1, 3],
         backgroundColor: ['red', 'blue', 'yellow', 'green', 'purple', 'orange'],

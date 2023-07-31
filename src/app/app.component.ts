@@ -1,10 +1,11 @@
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit,ElementRef } from '@angular/core';
 import { HttpClient, HttpClientModule} from '@angular/common/http';
 import { Stock } from './Models/Stock';
 import { MarketapiService } from './Services/marketapi.service';
 import { ChartData, HistoricalData } from './Models/Historical';
+import html2canvas from 'html2canvas';
 
-import { Chart } from 'angular-highcharts';
+import Chart from 'chart.js/auto';
 import { StockService } from './stock.service';
 import { DataStock } from './Models/DataStock';
 import { mergeMap, Observable, map } from 'rxjs';
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit{
   // data!:Stock[]
   data: any
   
-  dbstocks!:DataStock[]
+  public dbstocks!:DataStock[]
   // chartData: ChartData = {
   //   historical: [],
   //   symbol: ''
@@ -34,7 +35,8 @@ export class AppComponent implements OnInit{
   chartData: any
   
   lineChart!:Chart
-  constructor(private market:MarketapiService,private stockdb:StockService){
+  chart: any;
+  constructor(private market:MarketapiService,private stockdb:StockService,private elementRef: ElementRef){
     
   }
 
@@ -43,7 +45,30 @@ export class AppComponent implements OnInit{
 
     //this.getHistorical('AAPL')
     this.getAllStocksfromdb()
+    // const db=this.dbstocks
+    setTimeout(()=>{
+      console.log(this.dbstocks.map(stock=>stock.stockName))
+    
+    
+    
+    const chartData = {
+      labels:this.dbstocks.map(stock=>stock.stockName),//['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        data: this.dbstocks.map(stock=>stock.CurrPrice),
+        backgroundColor: ['red', 'blue', 'yellow', 'green', 'purple', 'orange','black','voilet'],
+      }]
+    };
+
+    this.chart = new Chart(this.elementRef.nativeElement.querySelector('canvas')
+    , {
+      type: 'pie',
+      data: chartData,
+    }
+    );
+  },3000)
+
   }
+  
 
 
  async getAllStocksfromdb() {

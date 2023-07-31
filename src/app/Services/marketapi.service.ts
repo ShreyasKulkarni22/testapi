@@ -9,7 +9,7 @@ import {Chart,ChartModule} from 'angular-highcharts'
 export class MarketapiService {
 
   base_url='https://financialmodelingprep.com/api/v3/'
-  key='apikey=c459c7cfabeb1db6d4efccded268ae65'
+  key='apikey=2345b9415d92f4a5a1b16697fdaf67d5'
   constructor(private http:HttpClient){
 
   }
